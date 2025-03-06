@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Página de Inicio - Streaming</title>
+
+    <!-- Enlace a Bootstrap 4 para el diseño responsivo y estilizado -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-pzjw8f+ua7Kw1TIq0E6pDhRl1t7fX02r6vYxj9a7u4s4g0Ds2U6M6dVIZh8Yt9N5" crossorigin="anonymous">
+
+    <!-- Estilos personalizados -->
+    <style>
+        /* Fondo de la página con tema de streaming */
+        body {
+            background-image: url('https://smartframe.io/wp-content/uploads/2021/11/Image-streaming-How-it-works-why-you-need-it-and-everything-else-you-need-to-know_SWM.jpg'); /* Imagen de fondo */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+        }
+
+        /* Estilo para el título de la página */
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            color: #f0f8ff;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Descripción */
+        .description {
+            font-size: 1.2em;
+            color: #f0f8ff;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Estilo para el menú de navegación */
+        .nav-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            font-size: 1.2em;
+            margin: 0 15px;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(0, 123, 255, 0.6);
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(0, 123, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Título de la página -->
+        <h1>Bienvenido a tu Plataforma de Streaming</h1>
+
+        <!-- Descripción breve -->
+        <p class="description">Disfruta de la mejor experiencia de streaming con contenido exclusivo. Regístrate o accede a tu cuenta para comenzar a ver tus películas y series favoritas.</p>
+
+        <!-- Menú de navegación -->
+        <div class="nav-links">
+            <a href="./registroUsu.jsp">Registro</a>
+            <a href="./login.jsp">Login</a>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap (necesarios para el funcionamiento del framework) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy0ht7xHiGJw0M8PaO5u6ZY1d2r8c7Z5Q4py6j0E" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0E6pDhRl1t7fX02r6vYxj9a7u4s4g0Ds2U6M6dVIZh8Yt9N5" crossorigin="anonymous"></script>
+</body>
 </html>
