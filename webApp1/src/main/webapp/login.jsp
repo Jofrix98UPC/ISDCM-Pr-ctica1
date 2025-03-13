@@ -91,7 +91,11 @@
 
     <div class="form-container">
         <h1>Iniciar Sesión</h1>
-        <form action="#" method="POST">
+        <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+        <% if (errorMessage != null) { %>
+            <p style="color: red;"><%= errorMessage %></p>
+        <% } %>
+        <form action="servletLoginUsuarios" method="POST" accept-charset="UTF-8">
             <!-- Nombre de usuario -->
             <div class="form-group">
                 <label for="username">Nombre de Usuario</label>
