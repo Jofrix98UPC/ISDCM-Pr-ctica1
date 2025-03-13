@@ -1,0 +1,8 @@
+controlador/servletRegistroVid.class
+controlador/servletUsuarios.class
+modelo/usuario.class
+isdcm/webapp1/resources/JakartaEE91Resource.class
+isdcm/webapp1/JakartaRestConfiguration.class
+modelo/video.class
+controlador/servletListadoVid.class
+.netbeans_automatic_build
