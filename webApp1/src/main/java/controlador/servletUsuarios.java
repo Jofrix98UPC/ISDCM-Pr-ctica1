@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "servletUsuarios", urlPatterns = {"/servletUsuarios"})
 public class servletUsuarios extends HttpServlet {
@@ -71,7 +72,13 @@ public class servletUsuarios extends HttpServlet {
 
                     int filasInsertadas = insertStmt.executeUpdate();
                     if (filasInsertadas > 0) {
-                        response.sendRedirect("listadoVid.jsp"); // Redirigir a listadoVid.jsp
+                        // Iniciar sesión automáticamente
+                        HttpSession session = request.getSession();
+                        session.setAttribute("usuario", nombreUsuario); // Guardar el nombre de usuario en la sesión
+                        session.setAttribute("nombre", nombre); // Opcional: guardar el nombre también
+
+                        // Redirigir al listado de videos o a la página principal
+                        response.sendRedirect("listadoVid.jsp"); 
                     } else {
                         response.setContentType("text/html");
                         try (PrintWriter out = response.getWriter()) {

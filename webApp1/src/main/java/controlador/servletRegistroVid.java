@@ -7,6 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.sql.Date; // Importar java.sql.Date para la compatibilidad con la base de datos
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,21 +26,22 @@ public class servletRegistroVid extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Recuperar datos del formulario
-        String nombre = request.getParameter("nombre");
-        String apellidos = request.getParameter("apellidos");
-        String correo = request.getParameter("correo");
-        String nombreUsuario = request.getParameter("usuario");
-        String contrasena = request.getParameter("contrasena");
+        // Recoger los datos del formulario
+        String titulo = request.getParameter("titulo");
+        String autor =  request.getParameter("autor");
+        String fechaCreacion = LocalDate.now().toString(); // Fecha actual (YYYY-MM-DD)
+        int duracion = 0; 
+        int reproducciones = 0;
+        String descripcion = request.getParameter("descripcion");
+        String formato = "MP4"; // Y este
+        String url = "http://localhost:8080/videos/" + titulo;
 
-        // Validar que los campos no estén vacíos
-        if (nombre == null || apellidos == null || correo == null || nombreUsuario == null || contrasena == null ||
-            nombre.isEmpty() || apellidos.isEmpty() || correo.isEmpty() || nombreUsuario.isEmpty() || contrasena.isEmpty()) {
-            
+        // Validar que el título no esté vacío
+        if (titulo == null || titulo.isEmpty()) {
             response.setContentType("text/html");
             try (PrintWriter out = response.getWriter()) {
-                out.println("<h1 style='color:red;'>Error: Todos los campos son obligatorios.</h1>");
-                response.setHeader("Refresh", "3; URL=registroUsu.jsp"); // Redirige después de 3 segundos
+                out.println("<h1 style='color:red;'>Error: El título es obligatorio.</h1>");
+                response.setHeader("Refresh", "3; URL=registroVid.jsp"); // Redirige después de 3 segundos
             }
             return;
         }
@@ -50,7 +53,7 @@ public class servletRegistroVid extends HttpServlet {
             try (Connection conn = DriverManager.getConnection(URL, USUARIO, PASSWORD)) {
                 // Obtener el ID más alto actual y sumarle 1
                 int nuevoId = 1; // Valor por defecto si la tabla está vacía
-                String getIdQuery = "SELECT MAX(ID) FROM USUARIOS";
+                String getIdQuery = "SELECT MAX(ID) FROM VIDEOS";
 
                 try (PreparedStatement getIdStmt = conn.prepareStatement(getIdQuery);
                      ResultSet rs = getIdStmt.executeQuery()) {
@@ -59,15 +62,22 @@ public class servletRegistroVid extends HttpServlet {
                     }
                 }
 
-                // Insertar el nuevo usuario con el ID calculado
-                String insertQuery = "INSERT INTO USUARIOS (ID, NOMBRE, APELLIDOS, CORREO, NOMBRE_USUARIO, CONTRASENA) VALUES (?, ?, ?, ?, ?, ?)";
+                // Convertir la duración de segundos a formato HH:MM:SS
+                String duracionFormato = convertirSegundosATiempo(duracion); // "00:02:00"
+
+                // Insertar el nuevo video con los datos proporcionados
+                String insertQuery = "INSERT INTO VIDEOS (ID, TITULO, AUTOR, FECHA_CREACION, DURACION, REPRODUCCIONES, DESCRIPCION, FORMATO, URL) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
                     insertStmt.setInt(1, nuevoId);
-                    insertStmt.setString(2, nombre);
-                    insertStmt.setString(3, apellidos);
-                    insertStmt.setString(4, correo);
-                    insertStmt.setString(5, nombreUsuario);
-                    insertStmt.setString(6, contrasena);
+                    insertStmt.setString(2, titulo); // Aquí se usa el título recibido del formulario
+                    insertStmt.setString(3, autor);
+                    insertStmt.setDate(4, Date.valueOf(fechaCreacion)); // Usar la fecha actual para la base de datos
+                    insertStmt.setString(5, duracionFormato); // Usamos el formato de duración
+                    insertStmt.setInt(6, reproducciones);
+                    insertStmt.setString(7, descripcion);
+                    insertStmt.setString(8, formato);
+                    insertStmt.setString(9, url);
 
                     int filasInsertadas = insertStmt.executeUpdate();
                     if (filasInsertadas > 0) {
@@ -75,8 +85,8 @@ public class servletRegistroVid extends HttpServlet {
                     } else {
                         response.setContentType("text/html");
                         try (PrintWriter out = response.getWriter()) {
-                            out.println("<h1 style='color:red;'>Error en el registro.</h1>");
-                            response.setHeader("Refresh", "3; URL=registroUsu.jsp"); // Redirige después de 3 segundos
+                            out.println("<h1 style='color:red;'>Error en el registro del video.</h1>");
+                            response.setHeader("Refresh", "3; URL=registroVid.jsp"); // Redirige después de 3 segundos
                         }
                     }
                 }
@@ -86,13 +96,23 @@ public class servletRegistroVid extends HttpServlet {
             response.setContentType("text/html");
             try (PrintWriter out = response.getWriter()) {
                 out.println("<h1 style='color:red;'>Error en la base de datos: " + e.getMessage() + "</h1>");
-                response.setHeader("Refresh", "3; URL=registroUsu.jsp"); // Redirige después de 3 segundos
+                response.setHeader("Refresh", "3; URL=registroVid.jsp"); // Redirige después de 3 segundos
             }
         }
     }
 
+    // Método para convertir segundos a formato HH:MM:SS
+    private String convertirSegundosATiempo(int segundos) {
+        int horas = segundos / 3600;
+        int minutos = (segundos % 3600) / 60;
+        int segundosRestantes = segundos % 60;
+        
+        // Formatear como HH:MM:SS
+        return String.format("%02d:%02d:%02d", horas, minutos, segundosRestantes);
+    }
+
     @Override
     public String getServletInfo() {
-        return "Servlet de registro de usuario";
+        return "Servlet de registro de video";
     }
 }
