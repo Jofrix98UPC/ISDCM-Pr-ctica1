@@ -1,4 +1,3 @@
-<%@ page session="true" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -69,13 +68,7 @@
     </style>
 </head>
 <body>
-    <%
-        // Usar directamente la variable session implícita
-        if (session == null || session.getAttribute("usuario") == null) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
-    %>
+   
 
     <div class="container">
         <div class="form-container">
