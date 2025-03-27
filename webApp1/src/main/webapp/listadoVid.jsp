@@ -76,6 +76,7 @@
         <div class="header">
             <h2>Listado Videos</h2>
             <a href="registroVid.jsp" class="btn-register">Registrar Video</a>
+            <a href="reproduccion.jsp" class="btn-register">Ver Videos</a>
         </div>
 
         <table>
