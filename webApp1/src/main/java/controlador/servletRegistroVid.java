@@ -34,7 +34,7 @@ public class servletRegistroVid extends HttpServlet {
         int reproducciones = 0;
         String descripcion = request.getParameter("descripcion");
         String formato = "MP4"; // Y este
-        String url = "http://localhost:8080/videos/" + titulo;
+        String url = request.getParameter("linkYT");
 
         // Validar que el título no esté vacío
         if (titulo == null || titulo.isEmpty()) {
