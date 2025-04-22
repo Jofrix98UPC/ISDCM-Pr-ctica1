@@ -88,9 +88,13 @@
                     <label for="autor">Autor</label>
                     <input type="text" class="form-control" id="autor" name="autor" placeholder="Ingrese el autor" required>
                 </div>
+                
+                <div class="form-group">
+                    <label for="autor">Link YT</label>
+                    <input type="text" class="form-control" id="linkYT" name="linkYT" placeholder="Ingrese el link de YT" required>
+                </div>
 
-                <label for="file">Selecciona un video:</label>
-                <input type="file" name="file" accept="video/mp4,video/avi,video/mov" required><br><br>
+                <br><br>
 
                 <input type="submit" value="Subir Video">
             </form>
