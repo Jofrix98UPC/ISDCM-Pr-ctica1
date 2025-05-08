@@ -83,47 +83,81 @@
     </div>
 
     <script>
-        // Llamada a la API REST para obtener la lista de videos
-        fetch('http://localhost:8080/webapp2/api/videos') // Aquí pones la URL de tu servicio REST
-            .then(response => response.json())
-            .then(videos => {
-                console.log(videos); // Verifica en la consola la respuesta de la API
-                const container = document.getElementById('videos-container');
-                
-                // Iteramos sobre el array de videos
-                videos.forEach((video, index) => {
-                    // Creamos un contenedor para cada video
-                    const videoContainer = document.createElement('div');
-                    videoContainer.classList.add('video-container');
+    // Llamada a la API REST para obtener la lista de videos
+    fetch('http://localhost:8080/webapp2/api/videos') // URL de tu servicio REST
+        .then(response => response.json())
+        .then(videos => {
+            console.log(videos); // Verifica en la consola la respuesta de la API
+            const container = document.getElementById('videos-container');
+            
+            // Iteramos sobre el array de videos
+            videos.forEach((video, index) => {
+                // Creamos un contenedor para cada video
+                const videoContainer = document.createElement('div');
+                videoContainer.classList.add('video-container');
 
-                    // Creamos el elemento de video
-                    const videoElement = document.createElement('video');
-                    videoElement.id = 'my-video-' + index;
-                    videoElement.classList.add('video-js', 'vjs-default-skin');
-                    videoElement.controls = true;
-                    videoElement.preload = "auto";
-                    
-                    // Creamos el source para el video de YouTube
-                    const source = document.createElement('source');
-                    source.src = video.url; // URL del video de YouTube
-                    source.type = 'video/youtube'; // Especificamos que el tipo es YouTube
-                    videoElement.appendChild(source);
+                // Creamos el elemento de video
+                const videoElement = document.createElement('video');
+                videoElement.id = 'my-video-' + index;
+                videoElement.classList.add('video-js', 'vjs-default-skin');
+                videoElement.controls = true;
+                videoElement.preload = "auto";
 
-                    // Agregamos el reproductor al contenedor
-                    videoContainer.appendChild(videoElement);
+                // Creamos el source para el video de YouTube
+                const source = document.createElement('source');
+                source.src = video.url; // URL del video
+                source.type = 'video/youtube'; // Especificamos que es de tipo YouTube
+                videoElement.appendChild(source);
 
-                    // Agregamos el contenedor del video al contenedor principal
-                    container.appendChild(videoContainer);
+                // Agregamos el reproductor al contenedor
+                videoContainer.appendChild(videoElement);
 
-                    // Inicializamos VideoJS para el nuevo video
-                    videojs(videoElement.id, {
-                        techOrder: ["youtube"]
+                // Crear elemento de texto para mostrar las reproducciones
+                const reproduccionesText = document.createElement('p');
+                reproduccionesText.id = 'reproducciones-' + video.id;
+                reproduccionesText.style.color = 'white';
+                reproduccionesText.style.fontWeight = 'bold';
+                reproduccionesText.style.marginTop = '10px';
+                reproduccionesText.innerText = "Reproducciones: " + video.reproducciones;
+       
+                videoContainer.appendChild(reproduccionesText);
+
+                // Agregamos el contenedor al DOM
+                container.appendChild(videoContainer);
+
+                // Inicializamos VideoJS para el nuevo video
+                const player = videojs(videoElement.id, {
+                    techOrder: ["youtube"]
+                });
+
+                // EVENTO: Aumentar reproducciones al reproducir
+                player.on('play', () => {
+                    fetch("http://localhost:8080/webapp2/api/videos/" + video.id + "/reproduccion", {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Incrementar visualmente el número de reproducciones
+                            video.reproducciones++;
+                            reproduccionesText.innerText = "Reproducciones: " + video.reproducciones;
+                        } else {
+                            console.error("No se pudo actualizar reproducciones para el video ID " + video.id);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error en el PUT de reproducciones:", error);
                     });
                 });
-            })
-            .catch(error => {
-                console.error('Error al cargar los videos:', error);
             });
+        })
+        .catch(error => {
+            console.error('Error al cargar los videos:', error);
+        });
+        
     </script>
 </body>
 </html>
