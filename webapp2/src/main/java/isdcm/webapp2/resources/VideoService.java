@@ -2,6 +2,7 @@ package isdcm.webapp2.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.PathParam;
@@ -168,5 +169,60 @@ public class VideoService {
             e.printStackTrace();
         }
     }
+    
+    private String convertirSegundosATiempo(int segundos) {
+        int horas = segundos / 3600;
+        int minutos = (segundos % 3600) / 60;
+        int segundosRestantes = segundos % 60;
+        return String.format("%02d:%02d:%02d", horas, minutos, segundosRestantes);
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String registrarVideo(Video video) {
+        String resultado = "Registro fallido";
+
+        try (Connection conn = DriverManager.getConnection(URL, USUARIO, PASSWORD)) {
+            // Obtener el nuevo ID
+            int nuevoId = 1;
+            try (PreparedStatement stmt = conn.prepareStatement("SELECT MAX(ID) FROM VIDEOS");
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    nuevoId = rs.getInt(1) + 1;
+                }
+            }
+
+            // Formatear duración a TIME si lo necesitas, o a String "HH:MM:SS"
+            String duracionFormato = convertirSegundosATiempo(video.getDuracion());
+
+            String sql = "INSERT INTO VIDEOS (ID, TITULO, AUTOR, FECHA_CREACION, DURACION, REPRODUCCIONES, DESCRIPCION, FORMATO, URL) "
+                       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, nuevoId);
+                ps.setString(2, video.getTitulo());
+                ps.setString(3, video.getAutor());
+                ps.setDate(4, video.getFechaCreacion());
+                ps.setString(5, duracionFormato); // Si tu columna es de tipo VARCHAR
+                ps.setInt(6, 0); // Reproducciones iniciales
+                ps.setString(7, video.getDescripcion());
+                ps.setString(8, video.getFormato());
+                ps.setString(9, video.getUrl());
+
+                int rows = ps.executeUpdate();
+                if (rows > 0) {
+                    resultado = "Video registrado con éxito";
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            resultado = "Error en la base de datos: " + e.getMessage();
+        }
+
+        return resultado;
+    }
+    
     
 }
