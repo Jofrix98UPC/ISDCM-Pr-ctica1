@@ -65,38 +65,44 @@
         .btn:hover {
             background-color: #0056b3;
         }
+
+        #mensaje {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
-   
 
     <div class="container">
         <div class="form-container">
             <h1>Subir Video</h1>
-            <form action="servletRegistroVid" method="post" accept-charset="UTF-8">
+            <form id="formRegistro">
                 <div class="form-group">
                     <label for="titulo">Título</label>
                     <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Ingrese el titulo" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="descripcion">Descripción</label>
                     <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese la descripcion" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="autor">Autor</label>
                     <input type="text" class="form-control" id="autor" name="autor" placeholder="Ingrese el autor" required>
                 </div>
-                
+
                 <div class="form-group">
-                    <label for="autor">Link YT</label>
+                    <label for="linkYT">Link YT</label>
                     <input type="text" class="form-control" id="linkYT" name="linkYT" placeholder="Ingrese el link de YT" required>
                 </div>
 
-                <br><br>
+                <div id="mensaje" class="text-white font-weight-bold"></div>
 
-                <input type="submit" value="Subir Video">
+                <br><br>
+                <input type="submit" class="btn btn-block" value="Subir Video">
             </form>
         </div>
     </div>
@@ -104,5 +110,46 @@
     <!-- Scripts de Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para enviar datos por fetch -->
+    <script>
+        document.getElementById("formRegistro").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const data = {
+                titulo: document.getElementById("titulo").value,
+                descripcion: document.getElementById("descripcion").value,
+                autor: document.getElementById("autor").value,
+                url: document.getElementById("linkYT").value,
+                fechaCreacion: new Date().toISOString().split('T')[0],
+                duracion: 0,
+                formato: "MP4",
+                reproducciones: 0
+            };
+
+            fetch("http://localhost:8080/webapp2/api/videos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.text())
+            .then(texto => {
+                const mensaje = document.getElementById("mensaje");
+                mensaje.textContent = texto;
+                if (texto.includes("éxito")) {
+                    document.getElementById("formRegistro").reset();
+                    setTimeout(() => {
+                        window.location.href = "listadoVid.jsp";
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                document.getElementById("mensaje").textContent = "Error al registrar el video.";
+                console.error(error);
+            });
+        });
+    </script>
 </body>
 </html>
