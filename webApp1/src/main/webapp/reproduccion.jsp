@@ -24,43 +24,83 @@
             height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Ajusta la alineación para que no se quede pegado al centro */
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
         .container {
-            max-width: 800px;
-        }
-
-        .form-container {
-            background-color: rgba(25, 25, 112, 0.85);
+            width: 100%;
+            max-width: 1000px;
             padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            color: #ffffff;
-            margin-bottom: 30px;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            font-weight: 700;
             color: #f0f8ff;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
 
         .video-container {
-            margin-top: 30px;
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 30px;
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-container:hover {
+            transform: scale(1.03);
+            transition: transform 0.3s ease-in-out;
         }
 
         video {
-            width: 100%;  /* Esto hace que el video ocupe el 100% del contenedor */
-            height: 500px; /* Puedes ajustar la altura aquí */
+            width: 60%; /* Video ocupará el 60% del contenedor */
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .video-info {
+            width: 40%; /* El contenedor de info ocupará el 40% restante */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .video-info h3 {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .reproducciones {
+            font-size: 1.2em;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .description {
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 300;
+            line-height: 1.6;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+            flex-grow: 1; /* Asegura que la descripción ocupe todo el espacio disponible */
         }
 
         @keyframes fadeIn {
@@ -71,13 +111,21 @@
         .form-container {
             animation: fadeIn 1s ease-in-out;
         }
+
+        /* Estilo para los controles de VideoJS */
+        .vjs-default-skin .vjs-control-bar {
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .vjs-play-control {
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="form-container">
-            <h1>Reproducción Videos</h1>
-        </div>
+        <h1>Reproducción de Videos</h1>
 
         <div id="videos-container"></div> <!-- Contenedor donde se agregarán los videos dinámicamente -->
     </div>
@@ -112,15 +160,29 @@
                 // Agregamos el reproductor al contenedor
                 videoContainer.appendChild(videoElement);
 
-                // Crear elemento de texto para mostrar las reproducciones
-                const reproduccionesText = document.createElement('p');
-                reproduccionesText.id = 'reproducciones-' + video.id;
-                reproduccionesText.style.color = 'white';
-                reproduccionesText.style.fontWeight = 'bold';
-                reproduccionesText.style.marginTop = '10px';
+                // Creamos un contenedor para la información del video (título, reproducciones, descripción)
+                const videoInfo = document.createElement('div');
+                videoInfo.classList.add('video-info');
+
+                // Título del video
+                const videoTitle = document.createElement('h3');
+                videoTitle.innerText = video.titulo;
+                videoInfo.appendChild(videoTitle);
+
+                // Reproducciones
+                const reproduccionesText = document.createElement('div');
+                reproduccionesText.classList.add('reproducciones');
                 reproduccionesText.innerText = "Reproducciones: " + video.reproducciones;
-       
-                videoContainer.appendChild(reproduccionesText);
+                videoInfo.appendChild(reproduccionesText);
+
+                // Descripción
+                const descriptionText = document.createElement('div');
+                descriptionText.classList.add('description');
+                descriptionText.innerText = video.descripcion;
+                videoInfo.appendChild(descriptionText);
+
+                // Agregamos la información al contenedor principal
+                videoContainer.appendChild(videoInfo);
 
                 // Agregamos el contenedor al DOM
                 container.appendChild(videoContainer);
