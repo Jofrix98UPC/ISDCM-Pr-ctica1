@@ -69,6 +69,17 @@
             background-color: #007BFF;
             color: white;
         }
+        .xml-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .xml-buttons form {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -122,11 +133,26 @@
                 }
             %>
         </table>
+        <div class="xml-buttons">
+            <form method="post" action="protegerXML">
+                <input type="hidden" name="op" value="cifrar">
+                <input type="submit" value="Cifrar XML" class="button">
+            </form>
+
+            <form method="post" action="protegerXML">
+                <input type="hidden" name="op" value="descifrar">
+                <input type="submit" value="Descifrar XML" class="button">
+            </form>
+        </div>
     </div>
 </body>
 <script>
     window.onload = function() {
         window.location.href = "<%= request.getContextPath() %>/servletListadoVid";
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("msg")) {
+            alert(params.get("msg"));
+        }
     };
 </script>
 </html>

@@ -1,7 +1,9 @@
+modelo/XMLProtect.class
 controlador/servletRegistroVid.class
 controlador/servletUsuarios.class
 controlador/servletLoginUsuarios.class
 modelo/usuario.class
+controlador/servletXML.class
 controlador/servletListadoVid.class
 modelo/FileEncryptor.class
 controlador/servletBusqueda.class

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><DIDL xmlns="urn:mpeg:mpeg21:2002:02-DIDL-NS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mpeg:mpeg21:2002:02-DIDL-NS didl.xsd">
+	<Item>
+		<Component>
+			<Descriptor>
+				<Statement mimeType="text/xml">
+					<metadata>
+						<id>1</id>
+						<titulo>No time to die</titulo>
+						<autor>Cary Joji Fukunaga</autor>
+						<anyo>2022</anyo>
+						<duracion>163</duracion>
+						<reproducciones>1150</reproducciones>
+					</metadata>
+				</Statement>
+			</Descriptor>
+			<Resource mimeType="video/mp4" ref="film1li.mp4"/>
+		</Component>
+	</Item>
+</DIDL>

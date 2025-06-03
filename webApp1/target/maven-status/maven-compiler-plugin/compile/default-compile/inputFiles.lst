@@ -1,12 +1,14 @@
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletUsuarios.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/modelo/usuario.java
-/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletLoginUsuarios.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletReproduccion.java
-/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/isdcm/webapp1/JakartaRestConfiguration.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/isdcm/webapp1/resources/JakartaEE91Resource.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/modelo/FileEncryptor.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletListadoVid.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletBusqueda.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletRegistroVid.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/modelo/video.java
+/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/modelo/XMLProtect.java
 /home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletCifrado.java
+/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletLoginUsuarios.java
+/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/isdcm/webapp1/JakartaRestConfiguration.java
+/home/alumne/Documentos/GitHub/ISDCM-Pr-ctica1/webApp1/src/main/java/controlador/servletXML.java
