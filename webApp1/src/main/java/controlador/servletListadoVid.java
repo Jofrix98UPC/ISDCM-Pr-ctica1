@@ -3,16 +3,16 @@ package controlador;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
-import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import modelo.video;
 
 @WebServlet(name = "servletListadoVid", urlPatterns = {"/servletListadoVid"})
 public class servletListadoVid extends HttpServlet {
@@ -23,31 +23,40 @@ public class servletListadoVid extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<String[]> videos = new ArrayList<>();
-        
-        try (Connection conn = DriverManager.getConnection(URL, USUARIO, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement("SELECT ID, TITULO, AUTOR, FECHA_CREACION, DURACION, REPRODUCCIONES, DESCRIPCION, FORMATO, URL FROM VIDEOS");
-             ResultSet rs = stmt.executeQuery()) {
-            
-            while (rs.next()) {
-                String id = rs.getString("ID");
-                String titulo = rs.getString("TITULO");
-                String autor = rs.getString("AUTOR");
-                String fecha = rs.getString("FECHA_CREACION");
-                String duracion = rs.getString("DURACION");
-                String reproducciones = rs.getString("REPRODUCCIONES");
-                String descripcion = rs.getString("DESCRIPCION");
-                String formato = rs.getString("FORMATO");
-                String url = rs.getString("URL");
+        throws ServletException, IOException {
+        ArrayList<video> videos = new ArrayList<>();
+        try {
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Connection con = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+            Statement st = con.createStatement();
+            String query = "SELECT id, titulo, autor, fecha_creacion, duracion, reproducciones, descripcion, ruta_archivo FROM videos";
+            ResultSet rs = st.executeQuery(query);
 
-                videos.add(new String[]{id, titulo, autor, fecha, duracion, reproducciones, descripcion, formato, url});
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String titulo = rs.getString("titulo");
+                String autor = rs.getString("autor");
+                String fecha = rs.getString("fecha_creacion");
+                Time tiempoDuracion = rs.getTime("duracion");
+                int duracion = tiempoDuracion.toLocalTime().toSecondOfDay(); // <-- conversión correcta
+                int reproducciones = rs.getInt("reproducciones");
+                String descripcion = rs.getString("descripcion");
+                String rutaArchivo = rs.getString("ruta_archivo");
+
+                video v = new video(id, titulo, autor, fecha, duracion, reproducciones, descripcion, rutaArchivo);
+                videos.add(v);
             }
-        } catch (SQLException e) {
+
+            rs.close();
+            st.close();
+            con.close();
+
+            request.setAttribute("videos", videos);
+            request.getRequestDispatcher("listadoVid.jsp").forward(request, response);
+        } catch (Exception e) {
             e.printStackTrace();
+            response.setContentType("text/plain");
+            response.getWriter().write("Error en servletListadoVid: " + e.getMessage());
         }
-        
-        request.setAttribute("videos", videos);
-        request.getRequestDispatcher("listadoVid.jsp").forward(request, response);
     }
 }

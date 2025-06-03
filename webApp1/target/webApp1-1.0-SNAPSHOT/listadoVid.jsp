@@ -76,6 +76,7 @@
         <div class="header">
             <h2>Listado Videos</h2>
             <a href="registroVid.jsp" class="btn-register">Registrar Video</a>
+            <a href="reproduccion.jsp" class="btn-register">Ver Videos</a>
         </div>
 
         <table>
@@ -87,20 +88,33 @@
                 <th>Duración</th>
                 <th>Reproducciones</th>
                 <th>Descripción</th>
+                <th>Acciones</th>
             </tr>
             <%
-                java.util.List<String[]> videos = (java.util.List<String[]>) request.getAttribute("videos");
+                java.util.List<modelo.video> videos = (java.util.List<modelo.video>) request.getAttribute("videos");
                 if (videos != null) {
-                    for (String[] video : videos) {
+                    for (modelo.video video : videos) {
             %>
             <tr>
-                <td><%= video[0] %></td>
-                <td><%= video[1] %></td>
-                <td><%= video[2] %></td>
-                <td><%= video[3] %></td>
-                <td><%= video[4] %></td>
-                <td><%= video[5] %></td>
-                <td><%= video[6] %></td>
+                <td><%= video.getId() %></td>
+                <td><%= video.getTitulo() %></td>
+                <td><%= video.getAutor() %></td>
+                <td><%= video.getFecha() %></td>
+                <td><%= video.getDuracion() %></td>
+                <td><%= video.getReproducciones() %></td>
+                <td><%= video.getDescripcion() %></td>
+                <td>
+                    <form method="post" action="cifrar" style="display:inline;">
+                        <input type="hidden" name="archivo" value="<%= video.getRutaArchivo() %>">
+                        <input type="hidden" name="op" value="cifrar">
+                        <input type="submit" value="Cifrar" class="button">
+                    </form>
+                    <form method="post" action="cifrar" style="display:inline;">
+                        <input type="hidden" name="archivo" value="cifrar_<%= video.getRutaArchivo() %>">
+                        <input type="hidden" name="op" value="descifrar">
+                        <input type="submit" value="Descifrar" class="button">
+                    </form>
+                </td>
 
             </tr>
             <%
