@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login JWT</title>
+</head>
+<body>
+    <h2>Autenticacion JWT</h2>
+    <form id="loginForm">
+        <label>Usuario:</label>
+        <input type="text" name="username" value="admin"><br><br>
+        <label>Contrasena:</label>
+        <input type="password" name="password" value="admin"><br><br>
+        <input type="submit" value="Obtener JWT">
+    </form>
+
+    <h3>Resultado:</h3>
+    <pre id="resultado"></pre>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            fetch("api/login", {
+                method: "POST",
+                body: new URLSearchParams(formData),
+                headers: {
+                    "Accept": "application/json"
+                }
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("resultado").textContent = data;
+            })
+            .catch(error => {
+                document.getElementById("resultado").textContent = "Error: " + error;
+            });
+        });
+    </script>
+</body>
+</html>
